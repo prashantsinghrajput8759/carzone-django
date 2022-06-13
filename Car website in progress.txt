@@ -93,4 +93,78 @@ STATICFILES_DIRS=[
 }
 
 -->create the content of those pages
+-->create super user by using - python manage.py createsuperuser(Car_Zone)
 
+-> Team Model {
+		from django.db import models
+	
+		class Team(models.Model):
+    first_name=models.CharField(max_length=255)
+    last_name=models.CharField(max_length=255)
+    designation=models.CharField(max_length=255)
+    photo=models.ImageField(upload_to='photos/%Y/%M/%D/')
+    facebook_link=models.URLField(max_length=100)
+    twitter_link=models.URLField(max_length=100)
+    google_plus_link=models.URLField(max_length=100)
+    created_date=models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.first_name +" " + self.last_name
+		
+}
+
+-now register the model on admins.py of the same app by using -    from .models import Team
+								   admin.site.register(Team)
+
+- now use python manage.py make migrations and python manage.py migrate command to migrate the database
+
+-> now the images and other media files which we will store in the database will be broken so to fix that we do media configurations
+-> MEDIA Configrations{
+		in main project setting.py - 
+
+						MEDIA_ROOT=os.path.join(BASE_DIR, 'media')
+						MEDIA_URL='/media/'
+
+		in main project urls.py -	from django.conf.urls.static import static
+						from django.conf import settings
+							
+						
+						urlpatterns = [
+   								 path('admin/', admin.site.urls),
+ 							         path('',include('pages.urls')),
+							      ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+}
+
+-> displaying team data into frontend
+- first of all u have to extract data from database i.e., from model(Team here).
+- do this in views.py in respective app to access the model and pass it to the html page{
+	home function will look like -
+					def home(request):
+   						 team=Team.objects.all()
+   
+   						 data={
+   							     'teams':team,
+   							 }
+   					 return render(request,'../templates/pages/home.html',data)
+
+} 
+- after this u need to access the data in html page {
+	to run for loop use syntax - {% for team in teams %} .....  {% endfor %}
+	to access particular field use syntax {{ team.first_name }} or {{ team.photo.url }}(for photo)
+}
+
+-> Team Admin customisation( admins.py)
+- displaying table containing team mates, their photos ,search bar, filter
+- add Html tag(for photo) - from django.utils.html import format_html
+- add class {
+		class TeamAdmin(admin.ModelAdmin):
+   			 def thumbnail(self,object):
+     		         return format_html('<img src="{}" width="40" style="border-radius: 50%;" />'.format(object.photo.url))
+                thumbnail.short_description='Photo'
+
+  	       list_display = ('id','thumbnail','first_name','designation','created_date',)
+    	       list_display_links = ('id','thumbnail','first_name',)
+   	       search_fields = ('first_name','last_name','designation',)
+    	       list_filter = ('designation',)
+}
+- register the above class in admins by 'admin.site.register(Team,TeamAdmin)'
