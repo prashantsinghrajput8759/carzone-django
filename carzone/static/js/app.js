@@ -479,3 +479,10 @@ $(function () {
         }
     }).trigger("resize");
 })(jQuery);
+
+
+
+// timeout for messages
+setTimeout(function(){
+    $('message').fadeOut('slow');
+},4000);
