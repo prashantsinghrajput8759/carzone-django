@@ -11,7 +11,7 @@
             <h1>Dashboard</h1>
             <ul class="breadcrumbs">
                 <li><a href="{% url 'home' %}">Home</a></li>
-                <li class="active">Username</li>
+                <li class="active">{{user.username}}</li>
             </ul>
         </div>
     </div>
@@ -26,40 +26,34 @@
             <h1>Welcome <span>{{user.username}}</span></h1>
             <p>Here are the cars that you have inquired about</p>
         </div>
+        {% if enquiries %}
+        
 	<table class="table table-hover">
 	  <thead>
 		<tr>
-		  <th scope="col">#</th>
+		  
 		  <th scope="col">Car Name</th>
 		  <th scope="col">Location</th>
-		  <th scope="col">Price</th>
+		  
 		  <th scope="col">Action</th>
 		</tr>
 	  </thead>
 	  <tbody>
+        {% for enquiry in enquiries %}
 		<tr>
-		  <th scope="row">1</th>
-		  <td>Lamborgini Huracan</td>
-		  <td>Austin</td>
-		  <td>$25000</td>
-		  <td><a href="#" class="btn btn-outline-dark">View Car</a></td>
+		  
+		  <td>{{enquiry.car_title}}</td>
+		  <td>{{enquiry.state}}</td>
+		  
+		  <td><a href="{% url 'cars_detail' enquiry.car_id %}" class="btn btn-outline-dark">View Car</a></td>
 		</tr>
-		<tr>
-		  <th scope="row">2</th>
-		  <td>Lamborgini Huracan</td>
-		  <td>Austin</td>
-		  <td>$25000</td>
-		  <td><a href="#" class="btn btn-outline-dark">View Car</a></td>
-		</tr>
-		<tr>
-		  <th scope="row">3</th>
-		  <td>Lamborgini Huracan</td>
-		  <td>Austin</td>
-		  <td>$25000</td>
-		  <td><a href="#" class="btn btn-outline-dark">View Car</a></td>
-		</tr>
+		{% endfor %}
 	  </tbody>
 	</table>
+    {% else %}
+    <h2> U haven't made any enquiry yet!!</h2>
+
+    {% endif %}
 </div>
 
 <!--   Dashboard End   -->

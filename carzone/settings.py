@@ -32,6 +32,7 @@ LOGIN_REDIRECT_URL='dashboard'
 # Application definition
 
 INSTALLED_APPS = [
+    'contacts.apps.ContactsConfig',
     'accounts.apps.AccountsConfig',
     'cars.apps.CarsConfig',
     'pages.apps.PagesConfig',
@@ -155,3 +156,11 @@ MESSAGE_TAGS = {
 
 # social account
 SITE_ID=1
+
+
+# EMAIL sending
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER='singhprashant8759@gmail.com'
+EMAIL_HOST_PASSWORD = 'glhelkajpitoaerz'
+EMAIL_USE_TLS = True
